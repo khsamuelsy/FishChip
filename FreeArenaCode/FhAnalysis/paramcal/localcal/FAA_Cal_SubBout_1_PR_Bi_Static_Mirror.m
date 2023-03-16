@@ -28,7 +28,8 @@ all_ddisp =[];
 all_ddisp_vel =[]; all_dur=[];
 all_overall_dori=[];
 
-for p=1:size(DataSet,2)
+for p=2
+%     for p=1:size(DataSet,2)
     CurrentDir = pwd;
     CurrentDir = [CurrentDir(1:end-54),'Data\pulled_2_plus_static\'];
     display(['Processing DataSet ...',num2str(DataSet(p))]);
@@ -162,20 +163,15 @@ for p=1:size(DataSet,2)
                     if FAA_zoneid(CoorTform(1,k-1),CoorTform(2,k-1))<finishzone
                         if k==finishtime+1
                             boutn = [boutn;0];
+                        elseif isempty(boutn)
+                            [i,j]
                         end
                         break
                     end
-                    if flag==1
-                        add_dis=pdist([CoorTform(1,k),CoorTform(2,k);savey,savex]);
-                    else
-                        add_dis=pdist([CoorTform(1,k),CoorTform(2,k);CoorTform(1,k-1),CoorTform(2,k-1)]);
-                    end
-                    if ~isnan(add_dis)
-                        cum_dis=cum_dis+add_dis;
-                    else
-                        savey=CoorTform(1,k);
-                        savex=CoorTform(2,k);
-                        flag=1;
+
+                    add_dis_fromlastframe=pdist([CoorTform(1,k),CoorTform(2,k);CoorTform(1,k-1),CoorTform(2,k-1)]);
+                    if ~isnan(add_dis_fromlastframe)
+                        cum_dis=cum_dis+add_dis_fromlastframe;
                     end
                     if ~isempty(find(results.allswimbout_details{1,i}(:,2)==k)) 
                         indx_entry = find(results.allswimbout_details{1,i}(:,2)==k);

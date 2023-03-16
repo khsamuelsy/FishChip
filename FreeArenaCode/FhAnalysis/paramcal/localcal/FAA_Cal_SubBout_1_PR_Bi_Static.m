@@ -123,6 +123,7 @@ for p=1:size(DataSet,2)
     count(p)=0;    overall_dori = [];
     
     for i=1:size(results.bordercrossing_details,2)
+
         xCoor=[];
         yCoor=[];
         for j=1:288
@@ -142,7 +143,10 @@ for p=1:size(DataSet,2)
             CoorTform=[1 0;0 -1]*CoorTform+[0;600];
         end
         count_extraswim = 0;
+        
         for j=1:size(results.bordercrossing_details{1,i},1)
+
+            vetdata=[];
             cum_dis=0;
             cum_boutn=0;
             cum_dori=0;
@@ -165,17 +169,11 @@ for p=1:size(DataSet,2)
                         end
                         break
                     end
-                    if flag==1
-                        add_dis=pdist([CoorTform(1,k),CoorTform(2,k);savey,savex]);
-                    else
-                        add_dis=pdist([CoorTform(1,k),CoorTform(2,k);CoorTform(1,k-1),CoorTform(2,k-1)]);
-                    end
-                    if ~isnan(add_dis)
-                        cum_dis=cum_dis+add_dis;
-                    else
-                        savey=CoorTform(1,k);
-                        savex=CoorTform(2,k);
-                        flag=1;
+
+                    add_dis_fromlastframe=pdist([CoorTform(1,k),CoorTform(2,k);CoorTform(1,k-1),CoorTform(2,k-1)]);
+                    if ~isnan(add_dis_fromlastframe)
+                        cum_dis=cum_dis+add_dis_fromlastframe;
+
                     end
                     if ~isempty(find(results.allswimbout_details{1,i}(:,2)==k)) 
                         indx_entry = find(results.allswimbout_details{1,i}(:,2)==k);
